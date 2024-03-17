@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1bv14iedjpar"]
+
+[ext_resource type="Script" path="res://scenes/bullet.gd" id="1_uo6v4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dclpy"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.756863, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_vugqn"]
+material = SubResource("StandardMaterial3D_dclpy")
+radius = 0.2
+height = 0.35
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_u31o8"]
+radius = 0.2
+
+[node name="Bullet" type="Node3D"]
+script = ExtResource("1_uo6v4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_vugqn")
+
+[node name="Hitbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("SphereShape3D_u31o8")
+
+[node name="deleteTiner" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="deleteTiner" to="." method="_on_delete_tiner_timeout"]

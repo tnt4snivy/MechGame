@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://bvy6e3vd4m8fv"]
+
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_tcipt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dpdes"]
+albedo_color = Color(1, 0.00784314, 1, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_pqi3j"]
+material = SubResource("StandardMaterial3D_dpdes")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j035r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tgom4"]
+albedo_color = Color(0, 0.917647, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fp1bn"]
+material = SubResource("StandardMaterial3D_tgom4")
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_tcipt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_pqi3j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_j035r")
+
+[node name="CameraOrigin" type="Node3D" parent="."]
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12578, 0)
+spring_length = 3.0
+margin = 0.5
+
+[node name="Camera3D" type="Camera3D" parent="CameraOrigin/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="Gun" type="Node3D" parent="CameraOrigin/SpringArm3D/Camera3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CameraOrigin/SpringArm3D/Camera3D/Gun"]
+transform = Transform3D(0.168895, 0, 0, 0, 0.145053, 0, 0, 0, 1, 0.648227, -0.790803, -3.22718)
+mesh = SubResource("BoxMesh_fp1bn")
+
+[node name="gunBarrel" type="Marker3D" parent="CameraOrigin/SpringArm3D/Camera3D/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65048, -0.777271, -3.68991)
+
+[node name="UI" type="Control" parent="CameraOrigin/SpringArm3D/Camera3D"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CameraOrigin/SpringArm3D/Camera3D/UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
