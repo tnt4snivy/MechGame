@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvy6e3vd4m8fv"]
+[gd_scene load_steps=8 format=3 uid="uid://bvy6e3vd4m8fv"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_tcipt"]
 
@@ -16,7 +16,9 @@ albedo_color = Color(0, 0.917647, 0, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_fp1bn"]
 material = SubResource("StandardMaterial3D_tgom4")
 
-[node name="Player" type="CharacterBody3D"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pdubj"]
+
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_tcipt")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -36,6 +38,7 @@ margin = 0.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 
 [node name="Gun" type="Node3D" parent="CameraOrigin/SpringArm3D/Camera3D"]
+transform = Transform3D(0.999848, 0.000913388, 0.0174285, 0, 0.99863, -0.052336, -0.0174524, 0.052328, 0.998477, 0, 0, -0.325575)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CameraOrigin/SpringArm3D/Camera3D/Gun"]
 transform = Transform3D(0.168895, 0, 0, 0, 0.145053, 0, 0, 0, 1, 0.648227, -0.790803, -3.22718)
@@ -52,7 +55,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="CameraOrigin/SpringArm3D/Camera3D/UI"]
+[node name="Crosshair" type="ColorRect" parent="CameraOrigin/SpringArm3D/Camera3D/UI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -65,3 +68,23 @@ offset_right = 10.0
 offset_bottom = 10.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CameraOrigin/SpringArm3D/Camera3D/UI"]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 128.0
+color = Color(1, 0, 1, 0.184314)
+
+[node name="HP" type="RichTextLabel" parent="CameraOrigin/SpringArm3D/Camera3D/UI"]
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 128.0
+theme_override_font_sizes/normal_font_size = 75
+text = "5000"
+
+[node name="Hurtbox" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hurtbox"]
+shape = SubResource("CapsuleShape3D_pdubj")
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]

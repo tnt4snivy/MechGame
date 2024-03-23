@@ -7,11 +7,15 @@ var MAX_BOOST_POWER=9
 var BOOST_ACCELERATION=0.5
 var HORIZONTAL_BOOST_SPEED=2
 var bullet_instance
+var whatHitMe
+
+@export var HP=50
 
 @onready var pivot=$CameraOrigin
 @onready var sens=0.1
 @onready var gun = $CameraOrigin/SpringArm3D/Camera3D/Gun
 @onready var gun_barrel = $CameraOrigin/SpringArm3D/Camera3D/Gun/gunBarrel
+@onready var hp_label = $CameraOrigin/SpringArm3D/Camera3D/UI/HP
 
 
 var bullet=load("res://scenes/bullet.tscn")
@@ -42,7 +46,11 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed("boost"):
 		if not is_on_floor():
-			velocity.y+=BOOST_ACCELERATION
+			velocity.y+=BOOST_ACCELERATION/2
+			velocity.y=clamp(velocity.y, 0, MAX_BOOST_POWER)
+			SPEED+=HORIZONTAL_BOOST_SPEED/2
+		elif velocity.x==0 and velocity.z==0:
+			velocity.y+=BOOST_ACCELERATION/2
 			velocity.y=clamp(velocity.y, 0, MAX_BOOST_POWER)
 			SPEED+=HORIZONTAL_BOOST_SPEED/2
 		else:
@@ -72,3 +80,12 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
+
+
+func _on_hurtbox_area_entered(area):
+	whatHitMe=area.get_parent()
+	if whatHitMe.is_in_group("Projectiles") and whatHitMe!=self:
+		HP-=whatHitMe.damage
+		hp_label.text=str(HP*100)
+	if HP==0:
+		queue_free()
